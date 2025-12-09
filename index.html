@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Steel Manager - المازون</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+
+    <div id="splash-screen">
+        <div class="splash-content">
+            <img src="logo.png" alt="El-Mazoun Logo" class="splash-logo">
+            <h2>EL-MAZOUN</h2>
+            <p>جاري التحميل...</p>
+        </div>
+    </div>
+
+    <div id="app" style="display:none;">
+        
+        <header>
+            <div class="header-right">
+                <button onclick="toggleMenu()" class="menu-btn"><i class="fas fa-bars"></i></button>
+                <img src="logo.png" alt="Logo" class="header-logo">
+                <span class="app-title">Steel Manager</span>
+            </div>
+            <div class="header-left">
+                <button onclick="showPage('alerts')" class="notif-btn"><i class="fas fa-bell"></i></button>
+            </div>
+        </header>
+
+        <div id="side-menu" class="sidebar">
+            <div class="sidebar-header">
+                <img src="logo.png" alt="Logo" class="menu-logo">
+                <h3>EL-MAZOUN</h3>
+                <p>إدارة الصاج المتكاملة</p>
+            </div>
+            <nav>
+                <button onclick="showPage('dashboard')"><i class="fas fa-home"></i> الرئيسية</button>
+                <button onclick="showPage('inventory')"><i class="fas fa-cubes"></i> المخزون</button>
+                <button onclick="showPage('sales')"><i class="fas fa-cash-register"></i> تسجيل بيع</button>
+                <button onclick="showPage('calculator')"><i class="fas fa-calculator"></i> حاسبة الوزن</button>
+                <button onclick="showPage('reports')"><i class="fas fa-file-alt"></i> التقارير</button>
+                <button onclick="showPage('profile')"><i class="fas fa-user-cog"></i> الملف الشخصي</button>
+            </nav>
+        </div>
+        <div id="overlay" onclick="toggleMenu()"></div>
+
+        <main>
+            <div id="dashboard" class="page active">
+                <h2>لوحة التحكم</h2>
+                <div class="stats-grid">
+                    <div class="card">
+                        <h3>مبيعات اليوم</h3>
+                        <p id="daily-sales">0 ج.م</p>
+                    </div>
+                    <div class="card">
+                        <h3>إجمالي المخزون</h3>
+                        <p id="total-stock">0 طن</p>
+                    </div>
+                </div>
+                
+                <div id="stock-alerts" class="alert-box" style="display:none;">
+                    <i class="fas fa-exclamation-triangle"></i> تنبيه: يوجد أصناف قاربت على الانتهاء!
+                </div>
+            </div>
+
+            <div id="inventory" class="page">
+                <h2>إدارة المخزون</h2>
+                <div class="form-card">
+                    <input type="text" id="inv-name" placeholder="اسم الصنف (مثال: صاج مجلفن)">
+                    <input type="number" id="inv-thickness" placeholder="السمك (مم)">
+                    <input type="number" id="inv-qty" placeholder="الكمية (شيت/طن)">
+                    <input type="number" id="inv-price" placeholder="سعر الشراء">
+                    <button onclick="addToInventory()" class="btn-primary">إضافة للمخزون</button>
+                </div>
+                <div class="table-responsive">
+                    <table id="inventory-table">
+                        <thead>
+                            <tr>
+                                <th>الصنف</th>
+                                <th>السمك</th>
+                                <th>الكمية</th>
+                                <th>السعر</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="sales" class="page">
+                <h2>تسجيل عملية بيع</h2>
+                <div class="form-card">
+                    <select id="sale-item" onchange="updatePriceSuggestion()">
+                        <option value="">اختر الصنف...</option>
+                    </select>
+                    <input type="text" id="sale-customer" placeholder="اسم العميل">
+                    <input type="number" id="sale-qty" placeholder="الكمية المباعة">
+                    <input type="number" id="sale-price" placeholder="سعر البيع">
+                    <button onclick="recordSale()" class="btn-success">تسجيل وخصم</button>
+                </div>
+            </div>
+
+            <div id="calculator" class="page">
+                <h2>حاسبة وزن وسعر</h2>
+                <div class="form-card">
+                    <label>النوع:</label>
+                    <select id="calc-type">
+                        <option value="7.85">حديد (أسود/مجلفن)</option>
+                        <option value="8.00">ستانلس</option>
+                    </select>
+                    <input type="number" id="calc-l" placeholder="الطول (متر)">
+                    <input type="number" id="calc-w" placeholder="العرض (متر)">
+                    <input type="number" id="calc-t" placeholder="السمك (مم)">
+                    <input type="number" id="calc-price-kg" placeholder="سعر الكيلو (اختياري)">
+                    <button onclick="calculateSteel()" class="btn-primary">احسب</button>
+                    
+                    <div id="calc-result" class="result-box">
+                        النتيجة ستظهر هنا...
+                    </div>
+                </div>
+            </div>
+
+            <div id="profile" class="page">
+                <div class="profile-header">
+                    <img src="logo.png" alt="Profile Logo">
+                    <h3>مدير النظام</h3>
+                </div>
+                <div class="form-card">
+                    <p>الإعدادات وصلاحيات المستخدمين (قريباً)</p>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
